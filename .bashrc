@@ -111,5 +111,7 @@ shopt -s cdspell
 
 
 #run time, info
+fortune -a | cowsay
 da=$(date +%D)
 echo Today is $da
+
