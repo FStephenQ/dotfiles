@@ -106,7 +106,7 @@ fi
 #Actual personal settings
 PS1="[\[\e[37m\]\t\[\e[0m\]]\[[\e[31m\]\u\[\e[0m\]@\[\e[36m\]\h\[\e[0m\]][\j]:\w>>"
 export EDITOR=/usr/bin/vim
-export BROWSER=/usr/bin/iron
+export BROWSER=/usr/bin/firefox
 shopt -s cdspell
 
 

@@ -4,7 +4,7 @@ hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)
 screen -t shell0 	0
 screen -t shell1 	1
 screen -t vim 		2 	vifm
-screen -t server 	3 	ssh fstephen@mercuryq.net
+screen -t server 	3 	ssh paranoidmessage.com
 
 bind j next
 bind k prev
