@@ -20,10 +20,12 @@ set cursorline
 set showcmd
 set nu
 set showmatch
+set foldmethod=syntax
 set laststatus=2
 set encoding=utf_8
 set t_Co=256
 set spelllang=en_us
+set foldmethod=syntax
 
 
 "key remapings
