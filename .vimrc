@@ -24,6 +24,8 @@ set laststatus=2
 set encoding=utf_8
 set t_Co=256
 set spelllang=en_us
+set foldmethod=syntax
+
 
 
 "key remapings
@@ -38,3 +40,4 @@ nmap \r z=
 
 "plugin fun
 let g:Powerline_symbols = 'unicode'
+let hl_xul_atts=1
