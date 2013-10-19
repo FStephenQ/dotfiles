@@ -40,3 +40,4 @@ nmap \r z=
 
 "plugin fun
 let g:Powerline_symbols = 'unicode'
+let hl_xul_atts=1
