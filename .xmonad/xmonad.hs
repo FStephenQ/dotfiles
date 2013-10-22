@@ -148,7 +148,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
     ++
 
-    [((mod4Mask .|. shiftMask, xK_l), spawn "slock")]
+    [((mod4Mask .|. shiftMask, xK_l), spawn "xscreensaver-command -activate")]
     ++
 
     --
@@ -222,6 +222,8 @@ myLayout = tiled ||| Mirror tiled ||| Full
 myManageHook = composeAll
     [ className =? "MPlayer"        --> doFloat
     , className =? "Gimp"           --> doFloat
+    , className =? "Steam" 	    --> doFloat
+    , className =? "net-minecraft-LauncherFrame" --> doFloat
     , resource  =? "desktop_window" --> doIgnore
     , resource  =? "kdesktop"       --> doIgnore ]
 
@@ -252,7 +254,7 @@ myEventHook = mempty
 -- per-workspace layout choices.
 --
 -- By default, do nothing.
-myStartupHook = spawn "~/Scripts/startup.sh"
+myStartupHook = spawn "~/startup.sh"
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
