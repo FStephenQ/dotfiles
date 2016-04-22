@@ -13,6 +13,8 @@ import System.Exit
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Util.Run(spawnPipe)
+import XMonad.Util.Run (safeSpawn)
+import System.Environment (getEnvironment)
 import XMonad.Util.EZConfig(additionalKeys)
 import System.IO
 
@@ -22,7 +24,7 @@ import qualified Data.Map        as M
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
-myTerminal      = "gnome-terminal"
+myTerminal      = "mate-terminal"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
@@ -37,7 +39,7 @@ myBorderWidth   = 1
 -- ("right alt"), which does not conflict with emacs keybindings. The
 -- "windows key" is usually mod4Mask.
 --
-myModMask       = mod4Mask
+myModMask       = mod1Mask
 
 -- The default number of workspaces (virtual screens) and their names.
 -- By default we use numeric strings, but any string may be used as a
@@ -64,7 +66,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
 
     -- launch dmenu
-    , ((modm,               xK_p     ), spawn "dmenu_run -b")
+    , ((modm,               xK_p     ), spawn "dmenu_run -fn 'Ubuntu Mono:style=Bold:pixelsize=21'")
 
     -- launch gmrun
     , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
@@ -261,6 +263,18 @@ myStartupHook = spawn "~/startup.sh"
 
 -- Run xmonad with the settings you specify. No need to modify this.
 --
+mateRun :: X ()
+mateRun = withDisplay $ \dpy -> do
+    rw <- asks theRoot
+    mate_panel <- getAtom "_MATE_PANEL_ACTION"
+    panel_run   <- getAtom "_MATE_PANEL_ACTION_RUN_DIALOG"
+    
+    io $ allocaXEvent $ \e -> do
+    	setEventType e clientMessage
+	setClientMessageEvent e rw mate_panel 32 panel_run 0
+	sendEvent dpy rw False structureNotifyMask e
+	sync dpy False
+
 main = do
 
 
@@ -281,7 +295,7 @@ main = do
 
       -- hooks, layouts
         layoutHook         = avoidStruts $ myLayout,
-        manageHook         = myManageHook,
+        manageHook         = manageDocks <+> myManageHook,
         handleEventHook    = myEventHook,
         logHook            = dynamicLogWithPP $ xmobarPP
                         { ppOutput = hPutStrLn xmproc
