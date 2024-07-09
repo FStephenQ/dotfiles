@@ -1,10 +1,10 @@
-Config { font = "-misc-fixed-*-*-*-*-21-*-*-*-*-*-*-*"
+Config { font = "-misc-fixed-*-*-*-*-13-*-*-*-*-*-*-*"
        , bgColor = "black"
-       , fgColor = "green"
-       , position = Bottom
+       , fgColor = "white"
+       , position = Top
        , lowerOnStart = False
        , commands = [ Run Weather "KBOS" ["-t","KBOS: <tempC>C","-L","18","-H","25","--normal","green","--high","red","--low","lightblue"] 36000
-                    , Run Network "wlp4s0" ["-L","0","-H","32","--normal","green","--high","red"] 10
+                    , Run Network "wlp0s20f3" ["-L","0","-H","32","--normal","green","--high","red"] 10
                     , Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
                     , Run Memory ["-t","Mem: <usedratio>%"] 10
                     , Run Swap [] 10
@@ -21,5 +21,5 @@ Config { font = "-misc-fixed-*-*-*-*-21-*-*-*-*-*-*-*"
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{%cpu% | %memory% * %swap% | %wlp4s0% | <fc=#ee9a00>%date%</fc>| %KBOS% | %coretemp% | %ibam%"
+       , template = "%StdinReader% }{%cpu% | %memory% * %swap% | %wlp0s20f3% | <fc=#ee9a00>%date%</fc>| %KBOS% | %coretemp% | %ibam%"
        }

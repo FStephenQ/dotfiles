@@ -9,7 +9,11 @@
 
 import XMonad
 import Data.Monoid
+import Control.Monad
+import Data.Maybe
+import XMonad.Hooks.EwmhDesktops
 import System.Exit
+import XMonad.Config.Gnome
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Util.Run(spawnPipe)
@@ -24,7 +28,7 @@ import qualified Data.Map        as M
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
-myTerminal      = "mate-terminal"
+myTerminal      = "gnome-terminal"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
@@ -150,7 +154,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
     ++
 
-    [((mod4Mask .|. shiftMask, xK_l), spawn "xscreensaver-command -activate")]
+    [((modm .|. shiftMask, xK_l), spawn "slock")]
     ++
 
     --
@@ -238,7 +242,8 @@ myManageHook = composeAll
 -- return (All True) if the default handler is to be run afterwards. To
 -- combine event hooks use mappend or mconcat from Data.Monoid.
 --
-myEventHook = mempty
+--myEventHook = mempty 
+
 
 ------------------------------------------------------------------------
 -- Status bars and logging
@@ -263,23 +268,21 @@ myStartupHook = spawn "~/startup.sh"
 
 -- Run xmonad with the settings you specify. No need to modify this.
 --
-mateRun :: X ()
-mateRun = withDisplay $ \dpy -> do
-    rw <- asks theRoot
-    mate_panel <- getAtom "_MATE_PANEL_ACTION"
-    panel_run   <- getAtom "_MATE_PANEL_ACTION_RUN_DIALOG"
-    
-    io $ allocaXEvent $ \e -> do
-    	setEventType e clientMessage
-	setClientMessageEvent e rw mate_panel 32 panel_run 0
-	sendEvent dpy rw False structureNotifyMask e
-	sync dpy False
+fullscreenStartupHook :: X ()
+fullscreenStartupHook = withDisplay $ \dpy -> do
+    r <- asks theRoot
+    a <- getAtom "_NET_SUPPORTED"
+    c <- getAtom "ATOM"
+    f <- getAtom "_NET_WM_STATE_FULLSCREEN"
+    io $ do
+        sup <- (join . maybeToList) <$> getWindowProperty32 dpy a r
+        when (fromIntegral f `notElem` sup) $
+            changeProperty32 dpy r a c propModeAppend [fromIntegral f]
 
 main = do
 
-
-    xmproc <- spawnPipe "xmobar /home/fstephen/.xmobarc"
-    xmonad $ defaultConfig {
+    xmproc <- spawnPipe "xmobar /home/fsq/.xmobarc"
+    xmonad $ gnomeConfig {
       -- simple stuff
         terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,
@@ -296,11 +299,21 @@ main = do
       -- hooks, layouts
         layoutHook         = avoidStruts $ myLayout,
         manageHook         = manageDocks <+> myManageHook,
-        handleEventHook    = myEventHook,
         logHook            = dynamicLogWithPP $ xmobarPP
                         { ppOutput = hPutStrLn xmproc
                         , ppTitle = xmobarColor "green" "" . shorten 50
                         },
-        startupHook        = myStartupHook
+        startupHook        = composeAll [
+        startupHook gnomeConfig,
+        -- fix fullscreen for Firefox
+        -- https://github.com/xmonad/xmonad-contrib/issues/288
+        fullscreenStartupHook,
+	myStartupHook
+    	],
+	handleEventHook = composeAll [
+        handleEventHook gnomeConfig,
+        -- fix fullscreen
+        fullscreenEventHook
+    ]
     }
 

@@ -104,7 +104,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 #Actual personal settings
-PS1="[\[\e[37m\]\t\[\e[0m\]]\[[\e[31m\]\u\[\e[0m\]@\[\e[36m\]\h\[\e[0m\]][\j]:\w>>"
+PS1="[\[\e[37m\]\t\[\e[0m\]]\[[\e[31m\]\u\[\e[0m\]@\[\e[36m\]\h\[\e[0m\]][\j]:\w\n->>"
 export EDITOR=/usr/bin/vim
 export BROWSER=/usr/bin/firefox
 shopt -s cdspell
@@ -115,3 +115,6 @@ fortune -a | cowsay
 da=$(date +%D)
 echo Today is $da
 
+
+# Added by LM Studio CLI tool (lms)
+export PATH="$PATH:/home/fsq/.cache/lm-studio/bin"
