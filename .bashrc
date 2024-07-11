@@ -103,8 +103,17 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
+source ~/dotfiles/git-prompt.sh
+
+# Git prompt features (read ~/.git-prompt.sh for reference)
+export GIT_PS1_SHOWDIRTYSTATE="true"
+export GIT_PS1_SHOWSTASHSTATE="true"
+export GIT_PS1_SHOWUNTRACKEDFILES="true"
+export GIT_PS1_SHOWUPSTREAM="auto"
+export GIT_PS1_SHOWCOLORHINTS="true"
+
 #Actual personal settings
-PS1="[\[\e[37m\]\t\[\e[0m\]]\[[\e[31m\]\u\[\e[0m\]@\[\e[36m\]\h\[\e[0m\]][\j]:\w\n->>"
+PS1="[\[\e[37m\]\t\[\e[0m\]]\[[\e[31m\]\u\[\e[0m\]@\[\e[36m\]\h\[\e[0m\]][\j]\$(__git_ps1):\w\n->>"
 export EDITOR=/usr/bin/vim
 export BROWSER=/usr/bin/firefox
 shopt -s cdspell
@@ -118,3 +127,5 @@ echo Today is $da
 
 # Added by LM Studio CLI tool (lms)
 export PATH="$PATH:/home/fsq/.cache/lm-studio/bin"
+alias protontricks='flatpak run com.github.Matoking.protontricks'
+alias protontricks-launch='flatpak run --command=protontricks-launch com.github.Matoking.protontricks'
