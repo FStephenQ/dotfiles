@@ -112,6 +112,8 @@ export GIT_PS1_SHOWUNTRACKEDFILES="true"
 export GIT_PS1_SHOWUPSTREAM="auto"
 export GIT_PS1_SHOWCOLORHINTS="true"
 
+export PATH="$HOME/.local/bin:$PATH"
+
 #Actual personal settings
 PS1="[\[\e[37m\]\t\[\e[0m\]]\[[\e[31m\]\u\[\e[0m\]@\[\e[36m\]\h\[\e[0m\]][\j]\$(__git_ps1):\w\n->>"
 export EDITOR=/usr/bin/vim

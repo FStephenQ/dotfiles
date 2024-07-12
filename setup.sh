@@ -1,3 +1,13 @@
-apt-get update && apt-get -y upgrade
-apt-get -y autoremove netcat-openbsd
-apt-get -y install python.pip cmake xmonad xmobar suckless-tools vim mate-desktop-environment exuberant-ctags bash cowsay fortune nethack-console screen tmux netcat-traditional nmap bsdgames xscreensaver cabal-install 
+#Add sources
+curl -fsSL https://apt.fury.io/wez/gpg.key | sudo gpg --yes --dearmor -o /usr/share/keyrings/wezterm-fury.gpg
+echo 'deb [signed-by=/usr/share/keyrings/wezterm-fury.gpg] https://apt.fury.io/wez/ * *' | sudo tee /etc/apt/sources.list.d/wezterm.list
+#Install initial tools
+sudo apt-get update && apt-get -y upgrade
+sudo apt-get -y autoremove $(cat rm_pkglist)
+sudo apt-get -y install $(cat pkglist)
+
+#Setup symlinks
+for file in .*; do
+    ln -si --target-directory=$HOME $PWD/$file
+done
+

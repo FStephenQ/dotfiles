@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -Wno-deprecations #-}
 --
 -- xmonad example config file.
 --
@@ -16,6 +17,8 @@ import System.Exit
 import XMonad.Config.Gnome
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
+import XMonad.Actions.NoBorders
+import XMonad.Util.Hacks
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.Run (safeSpawn)
 import System.Environment (getEnvironment)
@@ -28,7 +31,7 @@ import qualified Data.Map        as M
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
-myTerminal      = "gnome-terminal"
+myTerminal      = "wezterm"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
@@ -128,6 +131,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- See also the statusBar function from Hooks.DynamicLog.
     --
      , ((modm              , xK_b     ), sendMessage ToggleStruts)
+
+     , ((modm              , xK_f     ), withFocused toggleBorder)
 
 
      --Change volume
@@ -315,7 +320,8 @@ main = do
 	handleEventHook = composeAll [
         handleEventHook gnomeConfig,
         -- fix fullscreen
-        fullscreenEventHook
+        fullscreenEventHook,
+        fixSteamFlicker
     ]
     }
 
