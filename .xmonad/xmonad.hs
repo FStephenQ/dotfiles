@@ -288,7 +288,8 @@ fullscreenStartupHook = withDisplay $ \dpy -> do
 
 main = do
 
-    xmproc <- spawnPipe "xmobar /home/fsq/.xmobarc"
+    xmproc <- spawnPipe "xmobar -x 0 /home/fsq/.xmobarc"
+    xmproc2 <- spawnPipe "xmobar -x 1 /home/fsq/.xmobarc"
     xmonad $ gnomeConfig {
       -- simple stuff
         terminal           = myTerminal,
@@ -307,7 +308,7 @@ main = do
         layoutHook         = avoidStruts $ myLayout,
         manageHook         = manageDocks <+> myManageHook,
         logHook            = dynamicLogWithPP $ xmobarPP
-                        { ppOutput = hPutStrLn xmproc
+                        { ppOutput = \x -> hPutStrLn xmproc x >> hPutStrLn xmproc2 x
                         , ppTitle = xmobarColor "green" "" . shorten 50
                         },
         startupHook        = composeAll [
